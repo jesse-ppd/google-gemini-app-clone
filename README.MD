@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Bard_Gemini_Hero.width-1200.format-webp.webp" width="600px" title="Whatsapp">
+  <img src="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Bard_Gemini_Hero.width-1200.format-webp.webp" width="600px" title="Google Gemini">
 </p>
 <br />
 
