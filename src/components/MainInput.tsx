@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useRef } from "react";
 import {
   View,
   TextInput,
@@ -18,6 +18,7 @@ import { SendHorizonal } from "lucide-react-native";
 interface MainInputProps extends TextInputProps {
   isLoading?: boolean;
   disabled?: boolean;
+  hasPrompt: boolean;
   onComplete: () => void;
 }
 
@@ -25,8 +26,10 @@ const MainInput = ({
   isLoading,
   onComplete,
   disabled,
+  hasPrompt,
   ...props
 }: MainInputProps) => {
+  const prevHasPrompt = useRef(false);
   const translateYValue = useSharedValue(0);
 
   useLayoutEffect(() => {
@@ -35,18 +38,43 @@ const MainInput = ({
     });
   }, []);
 
+  useEffect(() => {
+    if (hasPrompt && !prevHasPrompt.current) {
+      translateYValue.value = withTiming(2, {
+        duration: 600,
+      });
+      prevHasPrompt.current = true;
+    }
+  }, [hasPrompt, prevHasPrompt]);
+
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
       {
-        translateY: interpolate(translateYValue.value, [0, 1], [100, 0]),
+        translateY: interpolate(
+          translateYValue.value,
+          [0, 1, 2],
+          [100, 0, 100]
+        ),
       },
     ],
+  }));
+
+  const buttonStyled = useAnimatedStyle(() => ({
+    bottom: interpolate(translateYValue.value, [0, 1, 2], [-48, -48, 70]),
   }));
 
   const handleCompletPrompt = useCallback(() => {
     Keyboard.dismiss();
     onComplete();
   }, [onComplete]);
+
+  const handleFocusInput = useCallback(() => {
+    if (translateYValue.value > 1) {
+      translateYValue.value = withTiming(1, {
+        duration: 600,
+      });
+    }
+  }, [translateYValue]);
 
   return (
     <Animated.View
@@ -56,26 +84,29 @@ const MainInput = ({
       <TextInput
         placeholder="Type, talk or share a photo"
         placeholderTextColor={colors.dark.DEFAULT}
-        className=" text-2xl flex-1"
+        className="text-2xl h-[120px] "
         multiline
+        onFocus={handleFocusInput}
         {...props}
       />
-      <View className="flex-row items-center justify-end mb-6 mr-4">
-        <TouchableOpacity
-          onPress={handleCompletPrompt}
-          disabled={!props.value || disabled}
+
+      <TouchableOpacity
+        onPress={handleCompletPrompt}
+        disabled={!props.value || disabled}
+      >
+        <Animated.View
+          style={buttonStyled}
+          className="absolute right-2 w-[50px] h-[50px] rounded-full justify-center items-center"
         >
-          <View className="w-[50px] h-[50px]  rounded-full justify-center items-center">
-            <SendHorizonal
-              color={
-                !props.value || disabled
-                  ? colors.dark.DEFAULT
-                  : colors.blue.DEFAULT
-              }
-            />
-          </View>
-        </TouchableOpacity>
-      </View>
+          <SendHorizonal
+            color={
+              !props.value || disabled
+                ? colors.dark.DEFAULT
+                : colors.blue.DEFAULT
+            }
+          />
+        </Animated.View>
+      </TouchableOpacity>
     </Animated.View>
   );
 };

@@ -1,8 +1,9 @@
-import React, { useLayoutEffect } from "react";
+import React, { memo, useEffect, useLayoutEffect, useRef } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SUGGESTIONS } from "../constants/suggestions";
 
 import Animated, {
+  interpolate,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
@@ -17,15 +18,16 @@ interface SuggestionItemProps {
   index: number;
 }
 
-const Suggestions = ({ onSelectSuggestion }: SuggestionProps) => {
+const Suggestions = memo(({ onSelectSuggestion }: SuggestionProps) => {
   return (
-    <View className="mt-6">
+    <View>
       <ScrollView
         horizontal
         contentContainerStyle={{
           paddingHorizontal: 20,
         }}
         showsHorizontalScrollIndicator={false}
+        className="mt-6"
       >
         {SUGGESTIONS.map((prompt, index) => (
           <SuggestionItem
@@ -38,7 +40,7 @@ const Suggestions = ({ onSelectSuggestion }: SuggestionProps) => {
       </ScrollView>
     </View>
   );
-};
+});
 
 const SuggestionItem = ({ prompt, onPress, index }: SuggestionItemProps) => {
   const opacityValue = useSharedValue(0);

@@ -4,7 +4,7 @@ import Header from "./src/components/Header";
 import Suggestions from "./src/components/Suggestions";
 import MainInput from "./src/components/MainInput";
 import Result from "./src/components/Result";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { geminiModel } from "./src/services/geminiModel";
 import { useDelayedTextValue } from "./src/hooks/useDelayedTextValue";
@@ -41,6 +41,11 @@ export default function App() {
     []
   );
 
+  const hasPrompt = useMemo(
+    () => (promptResult.length > 0 ? true : false),
+    [promptResult]
+  );
+
   return (
     <View className="flex-1 bg-white">
       <SafeAreaView className="flex-1 bg-white">
@@ -53,6 +58,7 @@ export default function App() {
           value={textValue}
           onChangeText={handleTextValue}
           onComplete={handlePrompt}
+          hasPrompt={hasPrompt}
         />
       </SafeAreaView>
     </View>
