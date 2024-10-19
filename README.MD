@@ -133,7 +133,15 @@ cd google-gemini-app-clone && npm install
 
 > Importante: You will need to start a billing account to be able to access the Vexter AI
 
+## **Step 4: Running the project**
+
 Now you're ready to see the project working
+
+```
+npx expo start
+```
+
+> The app was well tested using iPhone 14 emulator!
 
 ---
 
