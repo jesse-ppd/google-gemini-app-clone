@@ -27,7 +27,7 @@ const Result = memo(({ data, suggestionsHide }: ResultProps) => {
         opacity,
         height: !suggestionsHide ? HEIGHT / 1.85 : HEIGHT - 210,
       }}
-      className={`w-full bg-black`}
+      className={`w-full `}
     >
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
