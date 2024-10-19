@@ -19,7 +19,8 @@
     "react-native": "0.74.5",
     "react-native-reanimated": "~3.10.1",
     "expo-linear-gradient": "~13.0.2",
-    "@react-native-masked-view/masked-view": "0.3.1"
+    "@react-native-masked-view/masked-view": "0.3.1",
+    "@shopify/react-native-skia": "1.2.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -9,6 +9,7 @@ import { useCallback, useMemo, useState } from "react";
 import { geminiModel } from "./src/services/geminiModel";
 import { useDelayedTextValue } from "./src/hooks/useDelayedTextValue";
 import Empty from "./src/components/Empty";
+import Loading from "./src/components/Loading";
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(false);
@@ -52,11 +53,9 @@ export default function App() {
       <SafeAreaView className="flex-1 bg-white">
         <Header />
         <Suggestions onSelectSuggestion={handleTextValue} />
-        {!promptResult && !isLoading ? (
-          <Empty />
-        ) : (
-          <Result data={delayedValue} />
-        )}
+        {!promptResult && !isLoading && <Empty />}
+        {promptResult && !isLoading && <Result data={delayedValue} />}
+        {!promptResult && isLoading && <Loading />}
         <MainInput
           isLoading={false}
           disabled={!isFinished}
