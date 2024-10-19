@@ -6,9 +6,15 @@ import colors from "../../colors";
 
 const Empty: React.FC = () => {
   return (
-    <View className="flex-1 justify-center items-center -mt-40">
+    <View className="flex-1 justify-center items-center">
       <MaskedView
-        style={{ flex: 1, flexDirection: "row", height: "100%" }}
+        style={{
+          flex: 1,
+          flexDirection: "row",
+          height: "50%",
+          marginTop: 0,
+          zIndex: -1,
+        }}
         maskElement={
           <View
             style={{
@@ -16,6 +22,7 @@ const Empty: React.FC = () => {
               flex: 1,
               justifyContent: "center",
               alignItems: "center",
+              marginTop: -200,
             }}
           >
             <Text
