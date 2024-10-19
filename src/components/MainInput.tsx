@@ -38,15 +38,6 @@ const MainInput = ({
     });
   }, []);
 
-  useEffect(() => {
-    if (hasPrompt && !prevHasPrompt.current) {
-      translateYValue.value = withTiming(2, {
-        duration: 600,
-      });
-      prevHasPrompt.current = true;
-    }
-  }, [hasPrompt, prevHasPrompt]);
-
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
       {
@@ -76,6 +67,21 @@ const MainInput = ({
     }
   }, [translateYValue]);
 
+  const handleBlurInput = useCallback(() => {
+    if (translateYValue.value <= 1) {
+      translateYValue.value = withTiming(2, {
+        duration: 600,
+      });
+    }
+  }, [translateYValue]);
+
+  useEffect(() => {
+    if (hasPrompt && !prevHasPrompt.current) {
+      handleBlurInput();
+      prevHasPrompt.current = true;
+    }
+  }, [hasPrompt, prevHasPrompt, handleBlurInput]);
+
   return (
     <Animated.View
       style={animatedStyle}
@@ -87,6 +93,7 @@ const MainInput = ({
         className="text-2xl h-[120px] "
         multiline
         onFocus={handleFocusInput}
+        onBlur={handleBlurInput}
         {...props}
       />
 
