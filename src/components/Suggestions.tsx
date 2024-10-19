@@ -4,7 +4,7 @@ import {
   SquareDashedBottomCode,
   User,
 } from "lucide-react-native";
-import React, { memo, useLayoutEffect } from "react";
+import React, { memo, useLayoutEffect, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import Animated, {
@@ -40,6 +40,10 @@ const SUGGESTIONS = [
 ];
 
 const Suggestions = memo(({ onSelectSuggestion }: SuggestionProps) => {
+  const [isHide, setIsHide] = useState(false);
+
+  if (isHide) return null;
+
   return (
     <View>
       <ScrollView
@@ -58,6 +62,13 @@ const Suggestions = memo(({ onSelectSuggestion }: SuggestionProps) => {
             {...suggestion}
           />
         ))}
+        <TouchableOpacity onPress={() => setIsHide(true)}>
+          <View className="w-[150px] h-[140px] border-gray border-[2px] rounded-2xl mr-2 p-4 justify-center items-center">
+            <Text className="text-center text-base text-black">
+              Hide suggestions
+            </Text>
+          </View>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );

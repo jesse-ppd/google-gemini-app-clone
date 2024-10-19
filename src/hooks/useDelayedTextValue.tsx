@@ -15,7 +15,7 @@ export function useDelayedTextValue(value: string): [string, boolean] {
           const newCharacter = await new Promise<string>((resolve, reject) => {
             setTimeout(() => {
               resolve(character);
-            }, 5);
+            }, 2);
           });
 
           setDelayedValue((prevValue) => (prevValue += newCharacter));
