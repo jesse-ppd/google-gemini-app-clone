@@ -16,6 +16,8 @@ import colors from "../../colors";
 
 interface SuggestionProps {
   onSelectSuggestion: (prompt: string) => void;
+  isHide: boolean;
+  handleSuggestionsHide: (value: boolean) => void;
 }
 interface SuggestionItemProps {
   prompt: string;
@@ -39,40 +41,40 @@ const SUGGESTIONS = [
   },
 ];
 
-const Suggestions = memo(({ onSelectSuggestion }: SuggestionProps) => {
-  const [isHide, setIsHide] = useState(false);
+const Suggestions = memo(
+  ({ onSelectSuggestion, isHide, handleSuggestionsHide }: SuggestionProps) => {
+    if (isHide) return null;
 
-  if (isHide) return null;
-
-  return (
-    <View>
-      <ScrollView
-        horizontal
-        contentContainerStyle={{
-          paddingHorizontal: 20,
-        }}
-        showsHorizontalScrollIndicator={false}
-        className="mt-6"
-      >
-        {SUGGESTIONS.map((suggestion, index) => (
-          <SuggestionItem
-            key={`suggestion-${index}`}
-            index={index}
-            onPress={(prompt) => onSelectSuggestion(prompt)}
-            {...suggestion}
-          />
-        ))}
-        <TouchableOpacity onPress={() => setIsHide(true)}>
-          <View className="w-[150px] h-[140px] border-gray border-[2px] rounded-2xl mr-2 p-4 justify-center items-center">
-            <Text className="text-center text-base text-black">
-              Hide suggestions
-            </Text>
-          </View>
-        </TouchableOpacity>
-      </ScrollView>
-    </View>
-  );
-});
+    return (
+      <View>
+        <ScrollView
+          horizontal
+          contentContainerStyle={{
+            paddingHorizontal: 20,
+          }}
+          showsHorizontalScrollIndicator={false}
+          className="mt-6"
+        >
+          {SUGGESTIONS.map((suggestion, index) => (
+            <SuggestionItem
+              key={`suggestion-${index}`}
+              index={index}
+              onPress={(prompt) => onSelectSuggestion(prompt)}
+              {...suggestion}
+            />
+          ))}
+          <TouchableOpacity onPress={() => handleSuggestionsHide(true)}>
+            <View className="w-[150px] h-[140px] border-gray border-[2px] rounded-2xl mr-2 p-4 justify-center items-center">
+              <Text className="text-center text-base text-black">
+                Hide suggestions
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </ScrollView>
+      </View>
+    );
+  }
+);
 
 const SuggestionItem = ({
   prompt,

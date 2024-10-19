@@ -15,6 +15,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [textValue, setTextValue] = useState("");
 
+  const [suggestionsHide, setSuggestionsHide] = useState(false);
   const [promptResult, setPromptResult] = useState("");
   const [delayedValue, isFinished] = useDelayedTextValue(promptResult);
 
@@ -53,9 +54,15 @@ export default function App() {
     <View className="flex-1 bg-white">
       <SafeAreaView className="flex-1 bg-white">
         <Header />
-        <Suggestions onSelectSuggestion={handleTextValue} />
+        <Suggestions
+          isHide={suggestionsHide}
+          handleSuggestionsHide={(value: boolean) => setSuggestionsHide(value)}
+          onSelectSuggestion={handleTextValue}
+        />
         {!promptResult && !isLoading && <Empty />}
-        {promptResult && !isLoading && <Result data={delayedValue} />}
+        {promptResult && !isLoading && (
+          <Result data={delayedValue} suggestionsHide={suggestionsHide} />
+        )}
         {!promptResult && isLoading && <Loading />}
         <MainInput
           isLoading={false}

@@ -7,11 +7,12 @@ import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
 
 interface ResultProps {
   data: string;
+  suggestionsHide: boolean;
 }
 
 const HEIGHT = Dimensions.get("window").height;
 
-const Result = memo(({ data }: ResultProps) => {
+const Result = memo(({ data, suggestionsHide }: ResultProps) => {
   const opacity = useSharedValue(0);
 
   useEffect(() => {
@@ -24,9 +25,9 @@ const Result = memo(({ data }: ResultProps) => {
     <Animated.View
       style={{
         opacity,
-        height: HEIGHT / 1.85,
+        height: !suggestionsHide ? HEIGHT / 1.85 : HEIGHT - 210,
       }}
-      className={`w-full `}
+      className={`w-full bg-black`}
     >
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
