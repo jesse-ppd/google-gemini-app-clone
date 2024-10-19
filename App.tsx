@@ -21,6 +21,7 @@ export default function App() {
   const handlePrompt = useCallback(async () => {
     try {
       setIsLoading(true);
+      setPromptResult("");
       if (textValue) {
         const result = await geminiModel.generateContent(textValue);
 
