@@ -26,7 +26,7 @@ interface SuggestionItemProps {
 
 const SUGGESTIONS = [
   {
-    prompt: "Do you who is Hubert Ryan?",
+    prompt: "Do you know who is Hubert Ryan?",
     icon: <User color={colors.blue[900]} size={20} />,
   },
   {

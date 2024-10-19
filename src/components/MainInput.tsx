@@ -5,6 +5,7 @@ import {
   TextInputProps,
   TouchableOpacity,
   Keyboard,
+  Dimensions,
 } from "react-native";
 import colors from "../../colors";
 import Animated, {
@@ -22,6 +23,8 @@ interface MainInputProps extends TextInputProps {
   onComplete: () => void;
 }
 
+const WIDTH = Dimensions.get("window").width;
+
 const MainInput = ({
   isLoading,
   onComplete,
@@ -31,11 +34,13 @@ const MainInput = ({
 }: MainInputProps) => {
   const prevHasPrompt = useRef(false);
   const translateYValue = useSharedValue(0);
+  const withInput = useSharedValue(WIDTH - 50);
 
   useLayoutEffect(() => {
     translateYValue.value = withTiming(1, {
       duration: 600,
     });
+    withInput.value = WIDTH - 50;
   }, []);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -72,6 +77,7 @@ const MainInput = ({
       translateYValue.value = withTiming(2, {
         duration: 600,
       });
+      withInput.value = WIDTH - 100;
     }
   }, [translateYValue]);
 
@@ -87,15 +93,21 @@ const MainInput = ({
       style={animatedStyle}
       className="bg-white rounded-t-3xl h-[220px] shadow-xl absolute bottom-0 w-full px-4 pb-2 pt-6"
     >
-      <TextInput
-        placeholder="Type, talk or share a photo"
-        placeholderTextColor={colors.dark.DEFAULT}
-        className="text-2xl h-[120px] "
-        multiline
-        onFocus={handleFocusInput}
-        onBlur={handleBlurInput}
-        {...props}
-      />
+      <Animated.View
+        style={{
+          width: withInput,
+        }}
+      >
+        <TextInput
+          placeholder="Type, talk or share a photo"
+          placeholderTextColor={colors.dark.DEFAULT}
+          className="text-2xl h-[120px]"
+          multiline
+          onFocus={handleFocusInput}
+          onBlur={handleBlurInput}
+          {...props}
+        />
+      </Animated.View>
 
       <TouchableOpacity
         onPress={handleCompletPrompt}
