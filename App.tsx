@@ -7,11 +7,14 @@ import Result from "./src/components/Result";
 import { useCallback, useState } from "react";
 
 import { geminiModel } from "./src/services/geminiModel";
+import { useDelayedTextValue } from "./src/hooks/useDelayedTextValue";
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [textValue, setTextValue] = useState("");
+
   const [promptResult, setPromptResult] = useState("");
+  const [delayedValue, isFinished] = useDelayedTextValue(promptResult);
 
   const handlePrompt = useCallback(async () => {
     try {
@@ -33,16 +36,22 @@ export default function App() {
     }
   }, [textValue]);
 
+  const handleTextValue = useCallback(
+    (value: string) => setTextValue(value),
+    []
+  );
+
   return (
     <View className="flex-1 bg-white">
       <SafeAreaView className="flex-1 bg-white">
         <Header />
-        <Suggestions />
-        <Result data={promptResult} />
+        <Suggestions onSelectSuggestion={handleTextValue} />
+        <Result data={delayedValue} />
         <MainInput
           isLoading={false}
+          disabled={!isFinished}
           value={textValue}
-          onChangeText={(value) => setTextValue(value)}
+          onChangeText={handleTextValue}
           onComplete={handlePrompt}
         />
       </SafeAreaView>

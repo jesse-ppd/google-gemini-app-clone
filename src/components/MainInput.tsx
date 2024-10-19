@@ -1,9 +1,10 @@
-import React, { useLayoutEffect } from "react";
+import React, { useCallback, useLayoutEffect } from "react";
 import {
   View,
   TextInput,
   TextInputProps,
   TouchableOpacity,
+  Keyboard,
 } from "react-native";
 import colors from "../../colors";
 import Animated, {
@@ -15,11 +16,17 @@ import Animated, {
 import { SendHorizonal } from "lucide-react-native";
 
 interface MainInputProps extends TextInputProps {
-  isLoading: boolean;
+  isLoading?: boolean;
+  disabled?: boolean;
   onComplete: () => void;
 }
 
-const MainInput = ({ isLoading, onComplete, ...props }: MainInputProps) => {
+const MainInput = ({
+  isLoading,
+  onComplete,
+  disabled,
+  ...props
+}: MainInputProps) => {
   const translateYValue = useSharedValue(0);
 
   useLayoutEffect(() => {
@@ -36,6 +43,11 @@ const MainInput = ({ isLoading, onComplete, ...props }: MainInputProps) => {
     ],
   }));
 
+  const handleCompletPrompt = useCallback(() => {
+    Keyboard.dismiss();
+    onComplete();
+  }, [onComplete]);
+
   return (
     <Animated.View
       style={animatedStyle}
@@ -49,10 +61,17 @@ const MainInput = ({ isLoading, onComplete, ...props }: MainInputProps) => {
         {...props}
       />
       <View className="flex-row items-center justify-end mb-6 mr-4">
-        <TouchableOpacity onPress={() => onComplete()} disabled={!props.value}>
+        <TouchableOpacity
+          onPress={handleCompletPrompt}
+          disabled={!props.value || disabled}
+        >
           <View className="w-[50px] h-[50px]  rounded-full justify-center items-center">
             <SendHorizonal
-              color={!props.value ? colors.dark.DEFAULT : colors.blue.DEFAULT}
+              color={
+                !props.value || disabled
+                  ? colors.dark.DEFAULT
+                  : colors.blue.DEFAULT
+              }
             />
           </View>
         </TouchableOpacity>

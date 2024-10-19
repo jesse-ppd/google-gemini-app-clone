@@ -8,13 +8,16 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
+interface SuggestionProps {
+  onSelectSuggestion: (prompt: string) => void;
+}
 interface SuggestionItemProps {
   prompt: string;
   onPress: (prompt: string) => void;
   index: number;
 }
 
-const Suggestions = () => {
+const Suggestions = ({ onSelectSuggestion }: SuggestionProps) => {
   return (
     <View className="mt-6">
       <ScrollView
@@ -29,7 +32,7 @@ const Suggestions = () => {
             key={`suggestion-${index}`}
             prompt={prompt}
             index={index}
-            onPress={(prompt) => console.log(prompt)}
+            onPress={(prompt) => onSelectSuggestion(prompt)}
           />
         ))}
       </ScrollView>
