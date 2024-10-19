@@ -78,9 +78,6 @@ const Gradient = ({
   const color3 = useSharedValue(BLUE);
 
   const startX = useSharedValue(0);
-  const startY = useSharedValue(0);
-
-  const [startVec, setStartVec] = useState(vec(0, 0));
 
   useEffect(() => {
     startX.value = withRepeat(
@@ -92,29 +89,14 @@ const Gradient = ({
         withTiming(100, {
           duration: Math.round(Math.random() * DURATION) - 1500,
           easing: Easing.inOut(Easing.ease),
-        })
-      ),
-      -1
-    );
-    startY.value = withRepeat(
-      withSequence(
-        withTiming(256, {
-          duration: Math.round(Math.random() * DURATION) + 1500,
-          easing: Easing.inOut(Easing.ease),
         }),
-        withTiming(100, {
-          duration: Math.round(Math.random() * DURATION) - 1500,
+        withTiming(0, {
+          duration: Math.round(Math.random() * DURATION) - 500,
           easing: Easing.inOut(Easing.ease),
         })
       ),
       -1
     );
-
-    const interval = setInterval(() => {
-      setStartVec(vec(startX.value, startY.value));
-    }, 16);
-
-    return () => clearInterval(interval);
   }, []);
 
   const animatedColors = useDerivedValue(() => {
@@ -125,6 +107,10 @@ const Gradient = ({
     return [color1.value, color2.value, color3.value];
   }, [type]);
 
+  const startPos = useDerivedValue(() => {
+    return vec(startX.value, 0);
+  }, [startX]);
+
   return (
     <RoundedRect
       x={20}
@@ -134,7 +120,7 @@ const Gradient = ({
       r={12}
     >
       <LinearGradient
-        start={startVec}
+        start={startPos}
         end={vec(256, 150)}
         colors={animatedColors}
       />

@@ -1,22 +1,43 @@
-import React, { memo, useEffect, useLayoutEffect, useRef } from "react";
+import {
+  LayoutGrid,
+  LucideIcon,
+  SquareDashedBottomCode,
+  User,
+} from "lucide-react-native";
+import React, { memo, useLayoutEffect } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { SUGGESTIONS } from "../constants/suggestions";
 
 import Animated, {
-  interpolate,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import colors from "../../colors";
 
 interface SuggestionProps {
   onSelectSuggestion: (prompt: string) => void;
 }
 interface SuggestionItemProps {
   prompt: string;
+  icon: any;
   onPress: (prompt: string) => void;
   index: number;
 }
+
+const SUGGESTIONS = [
+  {
+    prompt: "Do you who is Hubert Ryan?",
+    icon: <User color={colors.blue[900]} size={20} />,
+  },
+  {
+    prompt: "Create a script react js to create a post list",
+    icon: <SquareDashedBottomCode color={colors.blue[900]} size={20} />,
+  },
+  {
+    prompt: "Give app suggestions with React Native ",
+    icon: <LayoutGrid color={colors.blue[900]} size={20} />,
+  },
+];
 
 const Suggestions = memo(({ onSelectSuggestion }: SuggestionProps) => {
   return (
@@ -29,12 +50,12 @@ const Suggestions = memo(({ onSelectSuggestion }: SuggestionProps) => {
         showsHorizontalScrollIndicator={false}
         className="mt-6"
       >
-        {SUGGESTIONS.map((prompt, index) => (
+        {SUGGESTIONS.map((suggestion, index) => (
           <SuggestionItem
             key={`suggestion-${index}`}
-            prompt={prompt}
             index={index}
             onPress={(prompt) => onSelectSuggestion(prompt)}
+            {...suggestion}
           />
         ))}
       </ScrollView>
@@ -42,7 +63,12 @@ const Suggestions = memo(({ onSelectSuggestion }: SuggestionProps) => {
   );
 });
 
-const SuggestionItem = ({ prompt, onPress, index }: SuggestionItemProps) => {
+const SuggestionItem = ({
+  prompt,
+  icon,
+  onPress,
+  index,
+}: SuggestionItemProps) => {
   const opacityValue = useSharedValue(0);
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacityValue.value,
@@ -58,9 +84,12 @@ const SuggestionItem = ({ prompt, onPress, index }: SuggestionItemProps) => {
     <TouchableOpacity onPress={() => onPress(prompt)}>
       <Animated.View
         style={animatedStyle}
-        className="w-[150px] h-[140px] bg-ice-50 rounded-2xl mr-2 px-2 py-4"
+        className="w-[150px] h-[140px] bg-ice-50 rounded-2xl mr-2 p-4"
       >
-        <Text className="text-base flex-1">{prompt}</Text>
+        <Text className="text-[16px] flex-1">{prompt}</Text>
+        <View className="bg-white self-end w-9 h-9 justify-center items-center rounded-full">
+          {icon}
+        </View>
       </Animated.View>
     </TouchableOpacity>
   );
